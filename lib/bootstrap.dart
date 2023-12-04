@@ -39,7 +39,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
       await sl.allReady();
 
       await sl<FlavorTypeCubit>().loadFlavor(env: env);
-      print('adasdadsdsa');
       // await Firebase.initializeApp();
 
       // FlutterError.onError = (details) {

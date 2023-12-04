@@ -6,13 +6,15 @@ import 'package:my_app/home/ui/bloc/products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   ProductsBloc() : super(ProductsLoading()) {
-    on<ProductsEvent>((event, emit) async {
-      emit(ProductsLoading());
-      if (event is InitialProductsEvent) {
+    on<InitialProductsEvent>((event, emit) async {
+      if (event.shouldShouLoader) {
         emit(ProductsLoading());
-        final products = await sl<ProductsRepository>().getProducts(event.searchValue);
-        emit(ProductsLoaded(products: products));
       }
+      final products = await sl<ProductsRepository>().getProducts(
+        event.searchValue,
+        showLoader: event.shouldShouLoader,
+      );
+      emit(ProductsLoaded(products: products.data.products));
     });
   }
 }

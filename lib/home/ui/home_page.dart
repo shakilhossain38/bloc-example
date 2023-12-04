@@ -5,6 +5,8 @@ import 'package:my_app/home/domain/entity/products.dart';
 import 'package:my_app/home/ui/bloc/prodcuts_event.dart';
 import 'package:my_app/home/ui/bloc/products_bloc.dart';
 import 'package:my_app/home/ui/bloc/products_state.dart';
+import 'package:my_app/home/ui/widgets/exports.dart';
+import 'package:my_app/l10n/l10n.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,93 +22,89 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    getProducts('');
+    getProducts(
+      '',
+      shouldShowLoader: true,
+    );
     super.initState();
   }
 
-  void getProducts(String searchValue) {
+  void getProducts(
+    String searchValue, {
+    bool shouldShowLoader = false,
+  }) {
     _productsBloc = sl<ProductsBloc>()
-      ..add(InitialProductsEvent(searchValue: searchValue));
+      ..add(
+        InitialProductsEvent(
+          searchValue: searchValue,
+          shouldShouLoader: shouldShowLoader,
+        ),
+      );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('App bar')),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            children: [
-              TextFormField(
-                onFieldSubmitted: getProducts,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  filled: true,
-                  hintStyle: TextStyle(color: Colors.grey[800]),
-                  hintText: 'Search here...',
-                  fillColor: Colors.white70,
-                ),
-              ),
-              BlocBuilder<ProductsBloc, ProductsState>(
-                bloc: _productsBloc,
-                builder: (context, productState) {
-                  print('saddsadadasa ${productState}');
-                  if (productState is ProductsLoaded) {
-                    products = productState.products.data.products;
+      appBar: _appBarWidget(),
+      body: _buildBody(),
+    );
+  }
 
-                  }
-                  return productState is ProductsLoaded
-                      ? ListView.builder(
-
-                          itemCount: products?.results.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.blueGrey.withOpacity(.2),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        products!.results[index].productName,
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        products!.results[index].description,
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          })
-                      : const Center(child: CircularProgressIndicator());
-                },
-              ),
-            ],
-          ),
-        ),
+  Widget _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          _textFieldWidget(),
+          _productsBody(),
+        ],
       ),
+    );
+  }
+
+  Widget _productsBody() {
+    return BlocBuilder<ProductsBloc, ProductsState>(
+      bloc: _productsBloc,
+      builder: (context, productState) {
+        if (productState is ProductsLoaded) {
+          products = productState.products;
+        }
+
+        if (productState is ProductsLoaded) {
+          return _productsListWidget();
+        } else {
+          return const Expanded(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _textFieldWidget() {
+    return TextFormField(
+      onFieldSubmitted: getProducts,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        filled: true,
+        hintStyle: TextStyle(color: Colors.grey[800]),
+        hintText: context.l10n.search,
+        fillColor: Colors.white70,
+      ),
+    );
+  }
+
+  PreferredSizeWidget _appBarWidget() {
+    return AppBarWidget(productsBloc: _productsBloc);
+  }
+
+  Widget _productsListWidget() {
+    return ProductsWidget(
+      products: products!,
     );
   }
 }

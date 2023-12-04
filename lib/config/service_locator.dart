@@ -3,6 +3,7 @@ import 'package:my_app/home/data/repository/implementation/products_repository_i
 import 'package:my_app/home/data/repository/source/products_source.dart';
 import 'package:my_app/home/domain/repository/products_repository.dart';
 import 'package:my_app/home/ui/bloc/flavor_cubit.dart';
+import 'package:my_app/home/ui/bloc/language_cubit.dart';
 import 'package:my_app/home/ui/bloc/products_bloc.dart';
 
 GetIt sl = GetIt.instance;
@@ -17,8 +18,11 @@ Future<void> setUpServiceLocators() async {
     ..registerSingleton<ProductSource>(
       ProductSourceImpl(),
     )
-    ..registerFactory<ProductsBloc>(
-      () => ProductsBloc(),
+    ..registerSingleton<ProductsBloc>(
+      ProductsBloc(),
+    )
+    ..registerSingleton<LanguageCubit>(
+      LanguageCubit(),
     )
     ..registerSingleton<ProductsRepository>(
       ProductsRepositoryImpl(),

@@ -1,0 +1,9 @@
+{
+    "@@locale": "bn",
+    "counterAppBarTitle": "Contador",
+    "appbarTitle" : "{count} টি {totalCount} এর মধ্যে",
+    "search" : "এখানে অনুসন্ধান করুন....",
+    "@counterAppBarTitle": {
+        "description": "Texto mostrado en la AppBar de la página del contador"
+    }
+}
