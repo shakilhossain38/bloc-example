@@ -11,6 +11,7 @@ import 'package:my_app/l10n/l10n.dart';
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarWidget({
     required this.productsBloc,
+    super.key,
   });
 
   final ProductsBloc productsBloc;
@@ -29,11 +30,11 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   context.l10n.appbarTitle(
                     decideNumber(
                       languageState,
-                      productState.products.results.length,
+                      productState.products.length,
                     ),
                     decideNumber(
                       languageState,
-                      productState.products.totalCount,
+                      productState.totalCount,
                     ),
                   ),
                 );

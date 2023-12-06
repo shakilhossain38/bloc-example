@@ -9,10 +9,12 @@ class ProductsRepositoryImpl implements ProductsRepository {
   Future<ProductsModel> getProducts(
     String searchValue, {
     bool showLoader = false,
+    int offset = 10,
   }) async {
     final surahDetailsResponse = await sl<ProductSource>().getProductsResponse(
       searchValue,
       showLoader: showLoader,
+      offset: offset,
     );
     return surahDetailsResponse.toEntity();
   }

@@ -34,7 +34,7 @@ Map<String, dynamic> _$DataItemToJson(DataItem instance) => <String, dynamic>{
 ProductsResponse _$ProductsResponseFromJson(Map<String, dynamic> json) =>
     ProductsResponse(
       count: json['count'] as int,
-      next: json['next'] as String,
+      next: json['next'],
       previous: json['previous'],
       results: (json['results'] as List<dynamic>)
           .map((e) => ResultResponse.fromJson(e as Map<String, dynamic>))
@@ -64,8 +64,7 @@ ResultResponse _$ResultResponseFromJson(Map<String, dynamic> json) =>
       slug: json['slug'] as String,
       productName: json['product_name'] as String,
       model: json['model'] as String,
-      commissionType:
-          $enumDecode(_$CommissionTypeEnumMap, json['commission_type']),
+      commissionType: json['commission_type'] as String?,
       amount: json['amount'] as String,
       tag: json['tag'] as String,
       description: json['description'] as String,
@@ -74,7 +73,7 @@ ResultResponse _$ResultResponseFromJson(Map<String, dynamic> json) =>
       maximumOrder: json['maximum_order'] as int,
       stock: json['stock'] as int,
       isBackOrder: json['is_back_order'] as bool,
-      specification: $enumDecode(_$SpecificationEnumMap, json['specification']),
+      specification: json['specification'] as String?,
       warranty: json['warranty'] as String,
       preOrder: json['pre_order'] as bool,
       productReview: json['product_review'] as int,
@@ -89,7 +88,7 @@ ResultResponse _$ResultResponseFromJson(Map<String, dynamic> json) =>
       language: json['language'],
       seller: json['seller'] as String,
       combo: json['combo'],
-      createdBy: $enumDecode(_$CreatedByEnumMap, json['created_by']),
+      createdBy: json['created_by'] as String?,
       updatedBy: json['updated_by'],
       category:
           (json['category'] as List<dynamic>).map((e) => e as int).toList(),
@@ -108,7 +107,7 @@ Map<String, dynamic> _$ResultResponseToJson(ResultResponse instance) =>
       'slug': instance.slug,
       'product_name': instance.productName,
       'model': instance.model,
-      'commission_type': _$CommissionTypeEnumMap[instance.commissionType]!,
+      'commission_type': instance.commissionType,
       'amount': instance.amount,
       'tag': instance.tag,
       'description': instance.description,
@@ -117,7 +116,7 @@ Map<String, dynamic> _$ResultResponseToJson(ResultResponse instance) =>
       'maximum_order': instance.maximumOrder,
       'stock': instance.stock,
       'is_back_order': instance.isBackOrder,
-      'specification': _$SpecificationEnumMap[instance.specification]!,
+      'specification': instance.specification,
       'warranty': instance.warranty,
       'pre_order': instance.preOrder,
       'product_review': instance.productReview,
@@ -132,30 +131,18 @@ Map<String, dynamic> _$ResultResponseToJson(ResultResponse instance) =>
       'language': instance.language,
       'seller': instance.seller,
       'combo': instance.combo,
-      'created_by': _$CreatedByEnumMap[instance.createdBy]!,
+      'created_by': instance.createdBy,
       'updated_by': instance.updatedBy,
       'category': instance.category,
       'related_product': instance.relatedProduct,
       'filter_value': instance.filterValue,
     };
 
-const _$CommissionTypeEnumMap = {
-  CommissionType.PERCENT: 'Percent',
-};
-
-const _$SpecificationEnumMap = {
-  Specification.EMPTY: '<|>',
-};
-
-const _$CreatedByEnumMap = {
-  CreatedBy.QTECSL: 'qtecsl',
-};
-
 Brand _$BrandFromJson(Map<String, dynamic> json) => Brand(
-      name: json['name'] as String,
-      image: json['image'] as String,
+      name: json['name'] as String?,
+      image: json['image'] as String?,
       headerImage: json['header_image'] as String?,
-      slug: json['slug'] as String,
+      slug: json['slug'] as String?,
     );
 
 Map<String, dynamic> _$BrandToJson(Brand instance) => <String, dynamic>{
@@ -167,11 +154,11 @@ Map<String, dynamic> _$BrandToJson(Brand instance) => <String, dynamic>{
 
 ChargeResponse _$ChargeResponseFromJson(Map<String, dynamic> json) =>
     ChargeResponse(
-      bookingPrice: (json['booking_price'] as num).toDouble(),
-      currentCharge: (json['current_charge'] as num).toDouble(),
+      bookingPrice: (json['booking_price'] as num?)?.toDouble(),
+      currentCharge: (json['current_charge'] as num?)?.toDouble(),
       discountCharge: json['discount_charge'],
-      sellingPrice: (json['selling_price'] as num).toDouble(),
-      profit: (json['profit'] as num).toDouble(),
+      sellingPrice: (json['selling_price'] as num?)?.toDouble(),
+      profit: (json['profit'] as num?)?.toDouble(),
       isEvent: json['is_event'] as bool,
       eventId: json['event_id'],
       highlight: json['highlight'] as bool,
@@ -202,11 +189,11 @@ Map<String, dynamic> _$ChargeResponseToJson(ChargeResponse instance) =>
     };
 
 Distributor _$DistributorFromJson(Map<String, dynamic> json) => Distributor(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      phoneNumber: json['phone_number'] as String,
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+      phoneNumber: json['phone_number'] as String?,
       servesEverywhere: json['serves_everywhere'] as bool,
-      stock: json['stock'] as int,
+      stock: json['stock'] as int?,
     );
 
 Map<String, dynamic> _$DistributorToJson(Distributor instance) =>
@@ -219,10 +206,10 @@ Map<String, dynamic> _$DistributorToJson(Distributor instance) =>
     };
 
 ImageItem _$ImageItemFromJson(Map<String, dynamic> json) => ImageItem(
-      id: json['id'] as int,
-      image: json['image'] as String,
-      isPrimary: json['is_primary'] as bool,
-      product: json['product'] as int,
+      id: json['id'] as int?,
+      image: json['image'] as String?,
+      isPrimary: json['is_primary'] as bool?,
+      product: json['product'] as int?,
     );
 
 Map<String, dynamic> _$ImageItemToJson(ImageItem instance) => <String, dynamic>{

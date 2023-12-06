@@ -3,6 +3,7 @@
     "counterAppBarTitle": "Counter",
     "appbarTitle" : "{count} out of {totalCount}",
     "search" : "Search here....",
+    "noProduct" : "Sorry, no product found!",
     "@counterAppBarTitle": {
         "description": "Text shown in the AppBar of the Counter Page"
     }

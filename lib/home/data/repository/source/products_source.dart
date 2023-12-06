@@ -9,6 +9,7 @@ abstract class ProductSource {
   Future<ProductResponseModel> getProductsResponse(
     String searchValue, {
     bool showLoader = false,
+    int offset = 10,
   });
 }
 
@@ -17,14 +18,15 @@ class ProductSourceImpl implements ProductSource {
   Future<ProductResponseModel> getProductsResponse(
     String searchValue, {
     bool showLoader = false,
+    int offset = 10,
   }) async {
-    if(!showLoader){
+    if (!showLoader && offset == 10) {
       BotToast.showLoading();
     }
     try {
       final response = await http.get(
         Uri.parse(
-          '${Urls.baseUrl}/${Urls.productsUrl}&search=${searchValue ?? ""}',
+          '${Urls.baseUrl}/${Urls.productsUrl}&offset=$offset&search=${searchValue ?? ""}',
         ),
       );
 
@@ -34,9 +36,7 @@ class ProductSourceImpl implements ProductSource {
       return jsonData;
     } catch (error) {
       BotToast.closeAllLoading();
-      throw Exception(
-        'Error fetching data',
-      );
+      return productResponseModelFromJson('');
     }
   }
 }

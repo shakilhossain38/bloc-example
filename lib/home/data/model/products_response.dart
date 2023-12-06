@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:my_app/home/domain/entity/products.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:my_app/home/domain/entity/products.dart';
 
 part 'products_response.g.dart';
 
 ProductResponseModel productResponseModelFromJson(String str) =>
-    ProductResponseModel.fromJson(json.decode(str) as  Map<String, dynamic>);
+    ProductResponseModel.fromJson(json.decode(str) as Map<String, dynamic>);
 
 @JsonSerializable()
 class ProductResponseModel {
@@ -28,10 +28,10 @@ class ProductResponseModel {
       for (final element in images) {
         tempImages.add(
           Image(
-            id: element.id,
-            imageUrl: element.image,
-            product: element.product,
-            isPrimary: element.isPrimary,
+            id: element.id ?? 0,
+            imageUrl: element.image ?? '',
+            product: element.product ?? 0,
+            isPrimary: element.isPrimary ?? false,
           ),
         );
       }
@@ -46,11 +46,11 @@ class ProductResponseModel {
             productId: element.id,
             imageUrl: element.image,
             charge: Charge(
-              bookingPrice: element.charge.bookingPrice,
-              currentCharge: element.charge.currentCharge,
+              bookingPrice: element.charge.bookingPrice ?? 0,
+              currentCharge: element.charge.currentCharge ?? 0,
               isHighlighted: element.charge.highlight,
-              profit: element.charge.profit,
-              sellingPrice: element.charge.sellingPrice,
+              profit: element.charge.profit ?? 0,
+              sellingPrice: element.charge.sellingPrice ?? 0,
             ),
             images: getImages(element.images),
             productName: element.productName,
@@ -65,7 +65,7 @@ class ProductResponseModel {
     Products getProducts(ProductsResponse response) {
       return Products(
         totalCount: response.count,
-        nextUrl: response.next,
+        nextUrl: response.next.toString(),
         previousUrl: response.previous.toString(),
         results: getProductList(response.results),
       );
@@ -111,7 +111,7 @@ class ProductsResponse {
   @JsonKey(name: 'count')
   final int count;
   @JsonKey(name: 'next')
-  final String next;
+  final dynamic next;
   @JsonKey(name: 'previous')
   final dynamic previous;
   @JsonKey(name: 'results')
@@ -182,7 +182,7 @@ class ResultResponse {
   @JsonKey(name: 'model')
   final String model;
   @JsonKey(name: 'commission_type')
-  final CommissionType commissionType;
+  final String? commissionType;
   @JsonKey(name: 'amount')
   final String amount;
   @JsonKey(name: 'tag')
@@ -200,7 +200,7 @@ class ResultResponse {
   @JsonKey(name: 'is_back_order')
   final bool isBackOrder;
   @JsonKey(name: 'specification')
-  final Specification specification;
+  final String? specification;
   @JsonKey(name: 'warranty')
   final String warranty;
   @JsonKey(name: 'pre_order')
@@ -230,7 +230,7 @@ class ResultResponse {
   @JsonKey(name: 'combo')
   final dynamic combo;
   @JsonKey(name: 'created_by')
-  final CreatedBy createdBy;
+  final String? createdBy;
   @JsonKey(name: 'updated_by')
   final dynamic updatedBy;
   @JsonKey(name: 'category')
@@ -252,13 +252,13 @@ class Brand {
 
   factory Brand.fromJson(Map<String, dynamic> json) => _$BrandFromJson(json);
   @JsonKey(name: 'name')
-  final String name;
+  final String? name;
   @JsonKey(name: 'image')
-  final String image;
+  final String? image;
   @JsonKey(name: 'header_image')
   final String? headerImage;
   @JsonKey(name: 'slug')
-  final String slug;
+  final String? slug;
 }
 
 @JsonSerializable()
@@ -283,15 +283,15 @@ class ChargeResponse {
   factory ChargeResponse.fromJson(Map<String, dynamic> json) =>
       _$ChargeResponseFromJson(json);
   @JsonKey(name: 'booking_price')
-  final double bookingPrice;
+  final double? bookingPrice;
   @JsonKey(name: 'current_charge')
-  final double currentCharge;
+  final double? currentCharge;
   @JsonKey(name: 'discount_charge')
-   dynamic discountCharge;
+  dynamic discountCharge;
   @JsonKey(name: 'selling_price')
-  final double sellingPrice;
+  final double? sellingPrice;
   @JsonKey(name: 'profit')
-  final double profit;
+  final double? profit;
   @JsonKey(name: 'is_event')
   final bool isEvent;
   @JsonKey(name: 'event_id')
@@ -312,19 +312,6 @@ class ChargeResponse {
   final dynamic message;
 }
 
-enum CommissionType {
-  @JsonValue('Percent')
-  PERCENT
-}
-
-final commissionTypeValues = EnumValues({'Percent': CommissionType.PERCENT});
-
-enum CreatedBy {
-  @JsonValue('qtecsl')
-  QTECSL
-}
-
-final createdByValues = EnumValues({'qtecsl': CreatedBy.QTECSL});
 
 @JsonSerializable()
 class Distributor {
@@ -339,15 +326,15 @@ class Distributor {
   factory Distributor.fromJson(Map<String, dynamic> json) =>
       _$DistributorFromJson(json);
   @JsonKey(name: 'id')
-  final int id;
+  final int? id;
   @JsonKey(name: 'name')
-  final String name;
+  final String? name;
   @JsonKey(name: 'phone_number')
-  final String phoneNumber;
+  final String? phoneNumber;
   @JsonKey(name: 'serves_everywhere')
   final bool servesEverywhere;
   @JsonKey(name: 'stock')
-  final int stock;
+  final int? stock;
 }
 
 @JsonSerializable()
@@ -362,30 +349,11 @@ class ImageItem {
   factory ImageItem.fromJson(Map<String, dynamic> json) =>
       _$ImageItemFromJson(json);
   @JsonKey(name: 'id')
-  final int id;
+  final int? id;
   @JsonKey(name: 'image')
-  final String image;
+  final String? image;
   @JsonKey(name: 'is_primary')
-  final bool isPrimary;
+  final bool? isPrimary;
   @JsonKey(name: 'product')
-  final int product;
-}
-
-enum Specification {
-  @JsonValue('<|>')
-  EMPTY
-}
-
-final specificationValues = EnumValues({'<|>': Specification.EMPTY});
-
-class EnumValues<T> {
-  EnumValues(this.map);
-
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
+  final int? product;
 }
